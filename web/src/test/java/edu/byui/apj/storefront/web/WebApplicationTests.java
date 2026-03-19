@@ -1,13 +1,13 @@
-package edu.byui.apj.storefront.parent;
+package edu.byui.apj.storefront.web;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ApjStorefrontApplicationTests {
+class WebApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
+    @Test
+    void contextLoads() {
+    }
 
 }
