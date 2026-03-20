@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>CS Heroes CardWerx — Featured Cards</title>
+    <!-- Roboto from Google Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="index.css" />
+</head>
+<body>
+<header class="site-header">
+    <div class="brand">
+        <!-- simple SVG logo + store name -->
+        <svg class="logo" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+            <rect x="4" y="8" width="56" height="48" rx="6" ry="6" />
+            <path d="M16 22h32M16 30h32M16 38h32" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <div class="title-block">
+            <h1 class="store-name">CS Heroes CardWerx</h1>
+            <h2 class="tagline">Curated trading cards & collectibles for the computer science nerd in your life.</h2>
+        </div>
+    </div>
+</header>
+
+<main class="main">
+    <section class="hero">
+        <h2>Featured Cards</h2>
+        <p class="lead">Hand-picked favorites from the collection — fetched live.</p>
+    </section>
+
+    <section id="featured" class="cards-section" aria-live="polite">
+        <div id="status" class="status">Loading featured cards…</div>
+        <div id="cards" class="cards-grid" hidden></div>
+    </section>
+</main>
+
+<footer class="site-footer">
+    <div class="footer-inner">
+        <div>CS Heroes CardWerx</div>
+        <div>1234 Mockingbird Lane • Rexburg, ID</div>
+        <div>Email: info@csheroescardwerx.com • Phone: (208) 356-5555</div>
+    </div>
+</footer>
+
+<script src="index.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,195 @@
+/* index.css - Simple, clean styling using the requested color palette
+   Palette:
+     #628395  (cool slate)  - primary
+     #96897b  (muted taupe)  - secondary
+     #dfd5a5  (soft cream)   - light background
+     #dbad6a  (warm gold)    - accent
+     #cf995f  (darker gold)  - accent2
+*/
+
+:root{
+    --primary: #628395;
+    --secondary: #96897b;
+    --bg: #dfd5a5;
+    --accent: #dbad6a;
+    --accent-2: #cf995f;
+
+    --radius: 10px;
+    --max-width: 1100px;
+    --gap: 18px;
+    --card-shadow: 0 6px 18px rgba(48,48,48,0.08);
+    --font-sans: "Roboto", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+    margin:0;
+    font-family:var(--font-sans);
+    background: linear-gradient(180deg, #ffffff 0%, var(--bg) 100%);
+    color:#222;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    line-height:1.4;
+}
+
+/* Header */
+.site-header{
+    background: linear-gradient(90deg,var(--primary), var(--secondary));
+    color: #fff;
+    padding: 18px 16px;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.08);
+}
+.brand{
+    max-width:var(--max-width);
+    margin:0 auto;
+    display:flex;
+    gap:12px;
+    align-items:center;
+}
+.logo{
+    width:64px;
+    height:64px;
+    flex:0 0 64px;
+    border-radius:12px;
+    fill: rgba(255,255,255,0.12);
+    stroke: rgba(255,255,255,0.08);
+}
+.store-name{
+    margin:0;
+    font-size:1.4rem;
+    font-weight:700;
+    letter-spacing:0.2px;
+}
+.tagline{
+    font-size:0.85rem;
+    opacity:0.94;
+}
+
+/* Main */
+.main{max-width:var(--max-width); margin:28px auto; padding:0 16px;}
+.hero h2{margin:0 0 6px; color:var(--primary); font-size:1.6rem; display: block;}
+.hero .lead{margin:0 0 18px; color:var(--secondary)}
+
+/* Status / loading */
+.status{
+    color:var(--secondary);
+    margin-bottom:12px;
+}
+
+/* Cards grid */
+.cards-grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap:var(--gap);
+    align-items:start;
+}
+
+/* Card */
+.card{
+    background: #fff;
+    border-radius: var(--radius);
+    overflow:hidden;
+    box-shadow: var(--card-shadow);
+    display:flex;
+    flex-direction:column;
+    min-height:260px;
+    transition: transform .15s ease, box-shadow .15s ease;
+}
+.card:focus-within,
+.card:hover{
+    transform: translateY(-6px);
+    box-shadow: 0 14px 30px rgba(30,30,30,0.12);
+    outline: none;
+}
+
+.card-media{
+    width:100%;
+    height:150px;
+    display:block;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:white;
+    font-weight:700;
+    font-size:1.1rem;
+    text-transform:uppercase;
+    letter-spacing:0.6px;
+}
+.card-media img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+}
+
+/* card content */
+.card-content{
+    padding:12px 14px;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    flex:1 1 auto;
+}
+.card-title{
+    font-size:1.05rem;
+    margin:0;
+    color:#222;
+    font-weight:600;
+}
+.card-desc{
+    font-size:0.9rem;
+    color:#444;
+    margin:0;
+    flex:1 1 auto;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+.card-meta{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:8px;
+    margin-top:8px;
+}
+.price{
+    font-weight:700;
+    color:var(--primary);
+}
+.cta{
+    background:var(--accent);
+    color:#fff;
+    border:none;
+    padding:6px 10px;
+    border-radius:8px;
+    font-weight:600;
+    cursor:pointer;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.08);
+}
+.cta:active{transform:translateY(1px)}
+
+/* Footer */
+.site-footer{
+    margin-top:28px;
+    padding:14px 16px;
+    background: rgba(0,0,0,0.03);
+    color: #222;
+    border-top:1px solid rgba(0,0,0,0.04);
+}
+.footer-inner{
+    max-width:var(--max-width);
+    margin:0 auto;
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    font-size:0.9rem;
+    color:var(--secondary);
+}
+
+/* Utilities & responsive tweaks */
+@media (min-width:900px){
+    .brand{gap:16px}
+    .title-block{flex-direction:row; align-items:center; gap:12px}
+    .tagline{font-size:0.95rem}
+}
