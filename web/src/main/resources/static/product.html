@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Fantasy CardWerx — Product</title>
+
+    <!-- Roboto -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="index.css" />
+    <link rel="stylesheet" href="product.css" />
+</head>
+<body>
+<header class="site-header">
+    <div class="brand">
+        <a href="index.html" class="logo-link" aria-label="Fantasy CardWerx home">
+            <svg class="logo" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+                <rect x="4" y="8" width="56" height="48" rx="6" ry="6" />
+                <path d="M16 22h32M16 30h32M16 38h32" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+        </a>
+
+        <div class="title-block">
+            <a href="index.html" class="store-name-link">
+                <h1 class="store-name">Fantasy CardWerx</h1>
+            </a>
+            <div class="tagline">APJ Store — Product details</div>
+        </div>
+
+        <nav class="header-nav" aria-label="Main navigation">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="product-listing.html" class="nav-link">Browse Products</a>
+        </nav>
+
+        <form id="searchFormP" class="search-form" role="search" aria-label="Search products">
+            <input id="searchInputP" class="search-input" type="search" name="q" placeholder="Search cards, specialty, contributor..." autocomplete="off" />
+            <button class="search-btn" type="submit">Search</button>
+        </form>
+    </div>
+</header>
+
+<main class="main">
+    <section id="productArea" class="product-area">
+        <div id="productStatus" class="status">Loading product…</div>
+
+        <div id="productInner" class="product-inner" hidden>
+            <!-- left: image -->
+            <div class="product-media-column">
+                <article id="productCard" class="card product-card" aria-live="polite">
+                    <div id="productMedia" class="card-media" role="img" aria-label="Product image"></div>
+                </article>
+            </div>
+
+            <!-- right: details -->
+            <div class="product-content-column">
+                <article class="card" style="padding:14px;">
+                    <div class="card-content">
+                        <h2 id="productTitle" class="card-title">Product title</h2>
+
+                        <div id="productMeta" class="card-meta product-meta-compact" style="margin-top:6px;">
+                            <div class="meta-row">
+                                <!-- Specialty shown here -->
+                                <div id="productSpecialty" class="meta-left">Specialty: —</div>
+                                <div id="productPrice" class="price">—</div>
+                            </div>
+                            <div class="meta-row">
+                                <!-- Contribution shown here -->
+                                <div id="productContribution" class="meta-left">Contribution: —</div>
+                                <div>
+                                    <a id="backToList" class="nav-link" href="product-listing.html">← Back to products</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- No description field in model; intentionally omitted -->
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer class="site-footer">
+    <div class="footer-inner">
+        <div>Fantasy CardWerx</div>
+        <div>1234 Mockingbird Lane • Boise, ID</div>
+        <div>Email: info@fantasycardwerx.example • Phone: (555) 555-555-5555</div>
+    </div>
+</footer>
+
+<script src="product.js" defer></script>
+</body>
+</html>

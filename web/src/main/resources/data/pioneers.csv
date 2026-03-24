@@ -1,0 +1,99 @@
+ID,Name,Specialty,Contribution,Price,ImageUrl
+1,Alan Turing,Algorithms_Theory,"Developed the concept of the Turing machine, laying the foundation for theoretical computer science.",67.99,./img/1.jpg
+2,Ada Lovelace,Algorithms_Theory,"Wrote the first algorithm intended for implementation on Charles Babbage's Analytical Engine, becoming the first computer programmer.",75.99,./img/2.jpg
+3,John von Neumann,Computer Architecture,Designed the von Neumann architecture that forms the basis of most modern computer systems.,11.99,./img/3.jpg
+4,Grace Hopper,Programming Languages,Developed the first compiler and was instrumental in the development of COBOL.,189.99,./img/4.jpg
+5,James Gosling,Programming Languages,Led the creation of the Java programming language while at Sun Microsystems in 1995.,182.99,./img/5.jpg
+6,Tim Berners-Lee,Networking_Internet,"Invented the World Wide Web while at CERN, creating the first web browser and server.",56.99,./img/6.jpg
+7,Bjarne Stroustrup,Programming Languages,"Created the C++ programming language as an extension of C, adding object-oriented features.",153.99,./img/7.jpg
+8,Donald Knuth,Algorithms_Theory,Wrote 'The Art of Computer Programming' and created the TeX typesetting system.,191.99,./img/8.jpg
+9,Dennis Ritchie,Programming Languages,Created the C programming language and co-developed the Unix operating system at Bell Labs.,135.99,./img/9.jpg
+10,Ken Thompson,Operating Systems,"Co-created the Unix operating system and developed the B programming language, predecessor to C.",163.99,./img/10.jpg
+11,Linus Torvalds,Operating Systems,Created the Linux kernel and initiated the development of Git version control system.,126.99,./img/11.jpg
+12,Claude Shannon,Algorithms_Theory,Established information theory with his landmark paper 'A Mathematical Theory of Communication'.,96.99,./img/12.jpg
+13,Marvin Minsky,Artificial Intelligence,Co-founded MIT's AI laboratory and made fundamental contributions to AI research.,107.99,./img/13.jpg
+14,Edsger W. Dijkstra,Algorithms_Theory,Developed Dijkstra's algorithm for shortest paths and made significant contributions to structured programming.,178.99,./img/14.jpg
+15,Margaret Hamilton,Software Engineering,Led the team that wrote the onboard flight software for NASA's Apollo missions.,134.99,./img/15.jpg
+16,Guido van Rossum,Programming Languages,"Created the Python programming language, focusing on code readability and simplicity.",84.99,./img/16.jpg
+17,John McCarthy,Artificial Intelligence,Coined the term 'artificial intelligence' and invented the Lisp programming language.,59.99,./img/17.jpg
+18,Patrick Naughton,Programming Languages,"Key member of the Green Team that developed Java, created the original Java GUI library.",117.99,./img/18.jpg
+19,Vint Cerf,Networking_Internet,Co-designed the TCP/IP protocols and architecture of the Internet.,118.99,./img/19.jpg
+20,Bob Kahn,Networking_Internet,Co-invented the Transmission Control Protocol (TCP) with Vint Cerf.,80.99,./img/20.jpg
+21,Larry Page,Networking_Internet,Co-founded Google and developed the PageRank algorithm.,35.99,https://placecats.com/200/280
+22,Sergey Brin,Networking_Internet,Co-founded Google and helped develop the PageRank algorithm.,56.99,https://placecats.com/200/280
+23,Barbara Liskov,Programming Languages,Developed the Liskov Substitution Principle and designed the CLU programming language.,196.99,https://placecats.com/200/280
+24,Bill Gates,Software Engineering,Co-founded Microsoft and helped develop early versions of BASIC for microcomputers.,12.99,https://placecats.com/200/280
+25,Steve Jobs,Computer Architecture,Co-founded Apple and was instrumental in the development of the Macintosh and later iOS devices.,89.99,https://placecats.com/200/280
+26,Richard Stallman,Software Engineering,Founded the Free Software Foundation and initiated the GNU Project.,85.99,https://placecats.com/200/280
+27,Mike Sheridan,Programming Languages,"Original member of the Green Team, helped define Java's business requirements.",183.99,https://placecats.com/200/280
+28,Tim Lindholm,Programming Languages,Led the Java Virtual Machine specification and implementation.,111.99,./img/28.jpg
+29,Bill Joy,Operating Systems,"Co-founder of Sun Microsystems, instrumental in Java's adoption and helped develop Berkeley Unix.",31.99,https://placecats.com/200/280
+30,Arthur van Hoff,Programming Languages,Wrote the Java compiler in Java and helped create the Java platform.,23.99,./img/30.jpg
+31,Jonathan Payne,Networking_Internet,"Created the WebRunner browser, predecessor to HotJava, demonstrating Java's capabilities.",97.99,https://placecats.com/200/280
+32,Amy Fowler,Graphics_HCI,Core developer of Swing GUI components and AWT architecture for Java.,36.99,https://placecats.com/200/280
+33,Guy L. Steele,Programming Languages,Wrote the original Java Language Specification with James Gosling.,36.99,./img/33.jpg
+34,Scott Oaks,Cybersecurity,Pioneered Java's security architecture and wrote influential Java security books.,152.99,./img/34.jpg
+35,Frank Yellin,Programming Languages,Key contributor to Java's security model and class libraries.,191.99,https://placecats.com/200/280
+36,Chris Warth,Programming Languages,"Key contributor to Java's development, worked on the original Java team.",169.99,https://placecats.com/200/280
+37,Anders Hejlsberg,Programming Languages,"Created Turbo Pascal, chief architect of Delphi, and later led the development of C# at Microsoft.",149.99,https://placecats.com/200/280
+38,Brendan Eich,Programming Languages,Created JavaScript in just 10 days while at Netscape in 1995.,18.99,https://placecats.com/200/280
+39,John Backus,Programming Languages,"Led the team that created FORTRAN, the first widely used high-level programming language.",196.99,https://placecats.com/200/280
+40,Edgar F. Codd,Database Systems,"Invented the relational model for database management, the theoretical basis for relational databases.",101.99,https://placecats.com/200/280
+41,Tony Hoare,Algorithms_Theory,Developed the Quicksort algorithm and made significant contributions to programming language design.,18.99,https://placecats.com/200/280
+42,Geoffrey Hinton,Artificial Intelligence,Pioneer in deep learning neural networks and backpropagation algorithms.,93.99,https://placecats.com/200/280
+43,Yann LeCun,Artificial Intelligence,Developed convolutional neural networks (CNNs) that revolutionized computer vision.,21.99,https://placecats.com/200/280
+44,Yoshua Bengio,Artificial Intelligence,Pioneering work on artificial neural networks and deep learning.,24.99,https://placecats.com/200/280
+45,Andrew Ng,Artificial Intelligence,"Co-founded Google Brain and Coursera, making significant contributions to deep learning research.",96.99,https://placecats.com/200/280
+46,Fei-Fei Li,Artificial Intelligence,"Created ImageNet, the dataset that revolutionized computer vision and deep learning.",95.99,https://placecats.com/200/280
+47,Judea Pearl,Artificial Intelligence,"Developed Bayesian networks and probabilistic approaches to AI, advancing causal reasoning.",16.99,https://placecats.com/200/280
+48,Ivan Sutherland,Graphics_HCI,"Developed Sketchpad, the first graphical user interface, and pioneered virtual reality.",183.99,https://placecats.com/200/280
+49,Niklaus Wirth,Programming Languages,"Created several programming languages including Pascal, Modula, and Oberon.",11.99,https://placecats.com/200/280
+50,Ray Tomlinson,Networking_Internet,Implemented the first email program and chose the @ symbol for email addresses.,12.99,https://placecats.com/200/280
+51,Brian Kernighan,Programming Languages,Co-authored the first book on C programming language and contributed to Unix development.,188.99,https://placecats.com/200/280
+52,Leslie Lamport,Algorithms_Theory,Developed the concept of distributed systems and created LaTeX document preparation system.,165.99,https://placecats.com/200/280
+53,Peter Naur,Programming Languages,Contributed to the development of ALGOL 60 and co-developed the Backus-Naur Form notation.,166.99,https://placecats.com/200/280
+54,Ted Codd,Database Systems,"Invented the relational model for database management, the theoretical basis for relational databases.",93.99,https://placecats.com/200/280
+55,James Clark,Networking_Internet,Significant contributor to XML and SGML standards and creator of various XML tools.,73.99,https://placecats.com/200/280
+56,Larry Wall,Programming Languages,"Created the Perl programming language, designed for text manipulation.",164.99,https://placecats.com/200/280
+57,Adele Goldberg,Programming Languages,Developed the Smalltalk language and pioneered object-oriented programming concepts.,193.99,https://placecats.com/200/280
+58,Alan Kay,Programming Languages,Pioneer of object-oriented programming and the concept of the personal computer.,140.99,https://placecats.com/200/280
+59,Douglas Engelbart,Graphics_HCI,Invented the computer mouse and demonstrated early hypertext systems.,99.99,https://placecats.com/200/280
+60,Ted Nelson,Networking_Internet,Pioneered hypertext and coined the term; developed the Xanadu project.,34.99,https://placecats.com/200/280
+61,Gordon Moore,Computer Architecture,Co-founder of Intel and author of Moore's Law predicting the growth of computing power.,120.99,https://placecats.com/200/280
+62,Seymour Cray,Computer Architecture,Designer of supercomputers and founder of Cray Research.,55.99,https://placecats.com/200/280
+63,Steve Wozniak,Computer Architecture,Co-founded Apple and designed the Apple I and Apple II computers.,61.99,https://placecats.com/200/280
+64,David Patterson,Computer Architecture,Developed the RISC processor architecture and co-authored influential computer architecture books.,83.99,https://placecats.com/200/280
+65,John Hennessy,Computer Architecture,Co-developed RISC architecture and co-authored key textbooks on computer architecture.,147.99,https://placecats.com/200/280
+66,Yukihiro Matsumoto,Programming Languages,"Created the Ruby programming language, focusing on programmer happiness.",20.99,https://placecats.com/200/280
+67,Rasmus Lerdorf,Programming Languages,"Created the PHP programming language, widely used for web development.",12.99,https://placecats.com/200/280
+68,Joe Armstrong,Programming Languages,"Created the Erlang programming language, designed for concurrent, distributed systems.",49.99,https://placecats.com/200/280
+69,Robin Milner,Programming Languages,Developed ML programming language and made significant contributions to concurrent systems theory.,14.99,https://placecats.com/200/280
+70,Kristen Nygaard,Programming Languages,"Co-invented Simula, the first object-oriented programming language.",176.99,https://placecats.com/200/280
+71,Ole-Johan Dahl,Programming Languages,"Co-created Simula with Kristen Nygaard, pioneering object-oriented programming concepts.",41.99,https://placecats.com/200/280
+72,Whitfield Diffie,Cybersecurity,Co-invented public key cryptography and the Diffie-Hellman key exchange protocol.,43.99,https://placecats.com/200/280
+73,Martin Hellman,Cybersecurity,Co-invented the Diffie-Hellman key exchange method for secure communications.,127.99,https://placecats.com/200/280
+74,Ron Rivest,Cybersecurity,Co-invented the RSA algorithm for public-key cryptography.,12.99,https://placecats.com/200/280
+75,Adi Shamir,Cybersecurity,Co-invented the RSA algorithm and made significant contributions to cryptography.,148.99,https://placecats.com/200/280
+76,Leonard Adleman,Cybersecurity,Co-invented the RSA algorithm and coined the term 'computer virus'.,95.99,https://placecats.com/200/280
+77,Bruce Schneier,Cybersecurity,Created several encryption algorithms and wrote influential books on cryptography and security.,23.99,https://placecats.com/200/280
+78,Jim Gray,Database Systems,Pioneered transaction processing concepts and contributed to database system development.,35.99,https://placecats.com/200/280
+79,Michael Stonebraker,Database Systems,"Created Ingres and Postgres database systems, pioneering relational and object-relational databases.",79.99,https://placecats.com/200/280
+80,Ralph Kimball,Database Systems,Developed the dimensional modeling approach for data warehousing.,136.99,https://placecats.com/200/280
+81,Tim Cook,Software Engineering,Led Apple's operational excellence and continued innovation after Steve Jobs.,44.99,https://placecats.com/200/280
+82,Satya Nadella,Software Engineering,"Transformed Microsoft's culture and business, emphasizing cloud computing and AI.",164.99,https://placecats.com/200/280
+83,Andrew S. Tanenbaum,Operating Systems,"Created MINIX, which influenced Linux, and wrote influential books on operating systems.",196.99,https://placecats.com/200/280
+84,Lynn Conway,Computer Architecture,Pioneer in microelectronics chip design and co-authored landmark textbook 'Introduction to VLSI Systems'.,172.99,https://placecats.com/200/280
+85,Jean E. Sammet,Programming Languages,"Developed FORMAC, the first widely used language for symbolic mathematics, and documented programming language history.",124.99,https://placecats.com/200/280
+86,Shafi Goldwasser,Cybersecurity,Pioneered zero-knowledge proofs and probabilistic encryption in cryptography.,34.99,https://placecats.com/200/280
+87,Frances E. Allen,Programming Languages,Pioneer in compiler optimization techniques and parallel computing.,176.99,https://placecats.com/200/280
+88,Maurice Wilkes,Computer Architecture,"Built the EDSAC, one of the first stored-program computers.",36.99,https://placecats.com/200/280
+89,Marc Andreessen,Networking_Internet,"Co-created Mosaic, the first widely-used web browser, and co-founded Netscape.",58.99,https://placecats.com/200/280
+90,Vannevar Bush,Graphics_HCI,"Conceptualized the Memex, a hypothetical device that influenced the development of hypertext.",117.99,https://placecats.com/200/280
+91,Bob Metcalfe,Networking_Internet,Invented Ethernet and co-founded 3Com Corporation.,93.99,https://placecats.com/200/280
+92,Randy Pausch,Graphics_HCI,Pioneer in virtual reality and human-computer interaction; created Alice programming environment.,111.99,https://placecats.com/200/280
+93,Sophie Wilson,Computer Architecture,"Designed the instruction set for ARM processors, now used in billions of devices.",50.99,https://placecats.com/200/280
+94,Steve Furber,Computer Architecture,Co-designed the ARM processor while at Acorn Computers.,64.99,https://placecats.com/200/280
+95,Butler Lampson,Software Engineering,Contributed to the development of personal distributed computing and local area networks.,151.99,https://placecats.com/200/280
+96,Roy Fielding,Networking_Internet,Principal author of the HTTP specification and formulated the REST architectural style.,150.99,https://placecats.com/200/280
+97,Katherine Johnson,Software Engineering,NASA mathematician whose calculations were critical for early U.S. spaceflights and the Space Shuttle program.,163.99,https://placecats.com/200/280
+98,Richard Hamming,Algorithms_Theory,"Developed error-detecting and error-correcting codes, including Hamming codes.",152.99,https://placecats.com/200/280

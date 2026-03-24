@@ -1,13 +1,27 @@
 // index.js
-// Fetch /api/cards/featured and render them into the page.
-// This script is deliberately defensive about the JSON shape so it works with
-// a few different APIs / mock backends.
+// Handles header search/navigation and homepage featured fetch
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Search on homepage header
+    const searchForm = document.getElementById('searchForm');
+    const searchInput = document.getElementById('searchInput');
+
+    if (searchForm) {
+        searchForm.addEventListener('submit', (ev) => {
+            ev.preventDefault();
+            const q = (searchInput.value || '').trim();
+            const params = new URLSearchParams();
+            if (q) params.set('q', q);
+            window.location.href = `product-listing.html?${params.toString()}`;
+        });
+    }
+
+    // Fetch featured cards for the homepage
     const statusEl = document.getElementById('status');
     const cardsEl = document.getElementById('cards');
 
-    // Show loading state
+    if (!statusEl || !cardsEl) return;
+
     statusEl.hidden = false;
     cardsEl.hidden = true;
     statusEl.textContent = 'Loading featured cards…';
@@ -19,8 +33,6 @@ document.addEventListener('DOMContentLoaded', () => {
             statusEl.textContent = 'Could not load featured cards. Please try again later.';
         });
 
-    // ---------- functions ----------
-
     async function fetchFeaturedCards() {
         const resp = await fetch('/api/cards/featured', { headers: { 'Accept': 'application/json' }});
         if (!resp.ok) {
@@ -29,36 +41,31 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         const data = await resp.json();
 
-        // Normalize: if response is an object with "cards" property, use it; otherwise assume array
         if (Array.isArray(data)) return data;
         if (data && Array.isArray(data.cards)) return data.cards;
-        // otherwise try to convert object values to array (fallback)
         if (data && typeof data === 'object') return Object.values(data);
         throw new Error('Unexpected response format from /api/cards/featured');
     }
 
     function renderCards(items) {
-        const statusEl = document.getElementById('status');
-        const cardsEl = document.getElementById('cards');
-
         if (!items || items.length === 0) {
             statusEl.textContent = 'No featured cards at the moment.';
             cardsEl.hidden = true;
             return;
         }
 
-        // Clear previous
         cardsEl.innerHTML = '';
         statusEl.hidden = true;
         cardsEl.hidden = false;
 
         items.forEach(item => {
-            // try to be flexible about field names
             const id = item.id ?? item.cardId ?? item.uuid ?? '';
             const title = item.name ?? item.title ?? item.cardName ?? 'Untitled Card';
-            const description = item.description ?? item.desc ?? item.summary ?? item.specialty ?? '';
+            const description = item.description ?? item.desc ?? item.summary ?? '';
             const price = item.price ?? item.cost ?? item.listPrice ?? null;
-            const imageUrl = item.imageUrl ?? item.image ?? item.img ?? item.thumbnail ?? null;
+            const imageUrl = item.imageURL ?? item.imageUrl ?? item.image ?? item.img ?? item.thumbnail ?? null;
+            const specialty = item.specialty ?? item.skill ?? item.category ?? '';
+            const contribution = item.contribution ?? item.contributor ?? item.author ?? '';
 
             const card = document.createElement('article');
             card.className = 'card';
@@ -71,11 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const img = document.createElement('img');
                 img.src = imageUrl;
                 img.alt = title;
-                // fallback if image fails
-                img.onerror = () => {
-                    img.style.display = 'none';
-                    media.textContent = titleInitials(title);
-                }
+                img.onerror = () => { img.style.display = 'none'; media.textContent = titleInitials(title); };
                 media.appendChild(img);
             } else {
                 media.textContent = titleInitials(title);
@@ -89,31 +92,33 @@ document.addEventListener('DOMContentLoaded', () => {
             h3.id = `card-title-${id}`;
             h3.textContent = title;
 
-            const p = document.createElement('p');
-            p.className = 'card-desc';
-            p.textContent = description || 'No description available.';
+            const desc = document.createElement('p');
+            desc.className = 'card-desc';
+            desc.textContent = description || `${specialty ? specialty + ' · ' : ''}${contribution ? 'By: ' + contribution : ''}`;
 
             const meta = document.createElement('div');
             meta.className = 'card-meta';
+
+            const row = document.createElement('div');
+            row.className = 'meta-row';
 
             const priceEl = document.createElement('div');
             priceEl.className = 'price';
             priceEl.textContent = price != null ? formatPrice(price) : '—';
 
-            const btn = document.createElement('button');
-            btn.className = 'cta';
-            btn.type = 'button';
-            btn.textContent = 'View';
-            // "View" is a mock: we don't navigate anywhere in this static demo.
-            btn.onclick = () => {
-                alert(`${title}\n\n${description || '(no description)'}\n\nPrice: ${priceEl.textContent}`);
-            };
+            const link = document.createElement('a');
+            link.className = 'cta';
+            link.setAttribute('role','button');
+            link.href = `product.html?id=${encodeURIComponent(id)}`;
+            link.textContent = 'View';
 
-            meta.appendChild(priceEl);
-            meta.appendChild(btn);
+            row.appendChild(priceEl);
+            row.appendChild(link);
+
+            meta.appendChild(row);
 
             content.appendChild(h3);
-            content.appendChild(p);
+            content.appendChild(desc);
             content.appendChild(meta);
 
             card.appendChild(media);
@@ -124,17 +129,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // helpers
     function titleInitials(title) {
-        // generate short initials to show over gradient when image is missing
         const words = (title || '').trim().split(/\s+/).slice(0,3);
         const initials = words.map(w => w[0]?.toUpperCase() ?? '').join('');
         return initials || 'FC';
     }
 
     function formatPrice(val) {
-        // try to be flexible with numeric / string values
         const num = (typeof val === 'string') ? Number(val.replace(/[^0-9.-]+/g,'')) : Number(val);
         if (!Number.isFinite(num)) return String(val);
-        // local formatting (USD as default)
         try {
             return new Intl.NumberFormat(undefined, { style: 'currency', currency: 'USD', maximumFractionDigits: 2 }).format(num);
         } catch (e) {

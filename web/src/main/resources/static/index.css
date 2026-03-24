@@ -1,4 +1,4 @@
-/* index.css - Simple, clean styling using the requested color palette
+/* index.css - Shared stylesheet using the requested color palette
    Palette:
      #628395  (cool slate)  - primary
      #96897b  (muted taupe)  - secondary
@@ -15,7 +15,7 @@
     --accent-2: #cf995f;
 
     --radius: 10px;
-    --max-width: 1100px;
+    --max-width: 1200px;
     --gap: 18px;
     --card-shadow: 0 6px 18px rgba(48,48,48,0.08);
     --font-sans: "Roboto", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
@@ -37,7 +37,7 @@ body{
 .site-header{
     background: linear-gradient(90deg,var(--primary), var(--secondary));
     color: #fff;
-    padding: 18px 16px;
+    padding: 14px 12px;
     box-shadow: 0 4px 18px rgba(0,0,0,0.08);
 }
 .brand{
@@ -48,27 +48,76 @@ body{
     align-items:center;
 }
 .logo{
-    width:64px;
-    height:64px;
-    flex:0 0 64px;
-    border-radius:12px;
+    width:56px;
+    height:56px;
+    flex:0 0 56px;
+    border-radius:10px;
     fill: rgba(255,255,255,0.12);
     stroke: rgba(255,255,255,0.08);
 }
+.title-block{
+    display:flex;
+    flex-direction:column;
+}
 .store-name{
     margin:0;
-    font-size:1.4rem;
+    font-size:1.25rem;
     font-weight:700;
     letter-spacing:0.2px;
+    color: #fff;
+    text-decoration: none;
 }
+.store-name-link { text-decoration:none; color:inherit; }
 .tagline{
-    font-size:0.85rem;
-    opacity:0.94;
+    font-size:0.82rem;
+    opacity:0.95;
+    color: rgba(255,255,255,0.92);
+}
+
+/* nav + search */
+.header-nav{
+    margin-left:auto;
+    display:flex;
+    gap:12px;
+    align-items:center;
+}
+.nav-link{
+    color: rgba(255,255,255,0.95);
+    text-decoration:none;
+    font-weight:500;
+    padding:6px 8px;
+    border-radius:8px;
+}
+.nav-link:hover{ background: rgba(255,255,255,0.06); }
+.nav-link.active{ background: rgba(255,255,255,0.09); }
+
+.search-form{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-left:12px;
+}
+.search-input{
+    padding:8px 10px;
+    border-radius:8px;
+    border: none;
+    min-width:220px;
+    font-size:0.95rem;
+}
+.search-input:focus{ outline: 3px solid rgba(255,255,255,0.12); }
+.search-btn{
+    padding:8px 10px;
+    border-radius:8px;
+    border:none;
+    background:var(--accent);
+    color:#fff;
+    font-weight:600;
+    cursor:pointer;
 }
 
 /* Main */
 .main{max-width:var(--max-width); margin:28px auto; padding:0 16px;}
-.hero h2{margin:0 0 6px; color:var(--primary); font-size:1.6rem; display: block;}
+.hero h2{margin:0 0 6px; color:var(--primary); font-size:1.6rem;}
 .hero .lead{margin:0 0 18px; color:var(--secondary)}
 
 /* Status / loading */
@@ -77,12 +126,29 @@ body{
     margin-bottom:12px;
 }
 
-/* Cards grid */
+/* Generic cards grid (homepage featured) */
 .cards-grid{
     display:grid;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     gap:var(--gap);
     align-items:start;
+}
+
+/* Product listing grid: 5 columns at large sizes, adjust responsively
+   Each page shows up to 20 items, but the grid will display 5 columns where possible
+*/
+.products-grid{
+    display:grid;
+    gap:var(--gap);
+    grid-template-columns: repeat(2, 1fr);
+}
+
+/* Breakpoints to reach 5 columns on wide screens */
+@media (min-width:720px){
+    .products-grid{ grid-template-columns: repeat(3, 1fr); }
+}
+@media (min-width:1000px){
+    .products-grid{ grid-template-columns: repeat(5, 1fr); } /* 5 per row */
 }
 
 /* Card */
@@ -105,7 +171,7 @@ body{
 
 .card-media{
     width:100%;
-    height:150px;
+    height:140px;
     display:block;
     background: linear-gradient(135deg, var(--accent), var(--accent-2));
     display:flex;
@@ -129,17 +195,17 @@ body{
     padding:12px 14px;
     display:flex;
     flex-direction:column;
-    gap:8px;
+    gap:6px;
     flex:1 1 auto;
 }
 .card-title{
-    font-size:1.05rem;
+    font-size:1rem;
     margin:0;
     color:#222;
-    font-weight:600;
+    font-weight:700;
 }
 .card-desc{
-    font-size:0.9rem;
+    font-size:0.86rem;
     color:#444;
     margin:0;
     flex:1 1 auto;
@@ -148,11 +214,17 @@ body{
 }
 .card-meta{
     display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:8px;
+    flex-direction:column;
+    gap:6px;
     margin-top:8px;
 }
+.meta-row{
+    display:flex;
+    justify-content:space-between;
+    gap:8px;
+    align-items:center;
+}
+.meta-left{ font-size:0.85rem; color:var(--secondary); }
 .price{
     font-weight:700;
     color:var(--primary);
@@ -185,6 +257,30 @@ body{
     gap:6px;
     font-size:0.9rem;
     color:var(--secondary);
+}
+
+/* Pagination */
+.pagination{
+    display:flex;
+    gap:8px;
+    justify-content:center;
+    margin-top:18px;
+    flex-wrap:wrap;
+}
+.page-btn{
+    padding:8px 10px;
+    border-radius:8px;
+    border:none;
+    background:#fff;
+    min-width:40px;
+    text-align:center;
+    cursor:pointer;
+    box-shadow: 0 6px 10px rgba(0,0,0,0.06);
+}
+.page-btn[aria-current="true"]{
+    background:var(--primary);
+    color:#fff;
+    font-weight:700;
 }
 
 /* Utilities & responsive tweaks */

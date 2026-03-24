@@ -3,9 +3,9 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Fantasy CardWerx — Featured Cards</title>
+    <title>Fantasy CardWerx — Products</title>
 
-    <!-- Roboto from Google Fonts -->
+    <!-- Roboto -->
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 
@@ -25,30 +25,32 @@
             <a href="index.html" class="store-name-link">
                 <h1 class="store-name">Fantasy CardWerx</h1>
             </a>
-            <div class="tagline">APJ Store — Curated trading cards & collectibles</div>
+            <div class="tagline">APJ Store — Browse all products</div>
         </div>
 
         <nav class="header-nav" aria-label="Main navigation">
             <a href="index.html" class="nav-link">Home</a>
-            <a href="product-listing.html" class="nav-link">Browse Products</a>
+            <a href="product-listing.html" class="nav-link active">Browse Products</a>
         </nav>
 
-        <form id="searchForm" class="search-form" role="search" aria-label="Search products">
-            <input id="searchInput" class="search-input" type="search" name="q" placeholder="Search cards, specialty, contributor..." autocomplete="off" />
+        <form id="searchFormPL" class="search-form" role="search" aria-label="Search products">
+            <input id="searchInputPL" class="search-input" type="search" name="q" placeholder="Search cards, specialty, contributor..." autocomplete="off" />
             <button class="search-btn" type="submit">Search</button>
         </form>
     </div>
 </header>
 
 <main class="main">
-    <section class="hero">
-        <h2>Featured Cards</h2>
-        <p class="lead">Hand-picked favorites from the APJ collection — fetched live.</p>
+    <section class="products-hero">
+        <h2 id="resultsHeading">Products</h2>
+        <p id="resultsSummary" class="lead">Loading products…</p>
     </section>
 
-    <section id="featured" class="cards-section" aria-live="polite">
-        <div id="status" class="status">Loading featured cards…</div>
-        <div id="cards" class="cards-grid" hidden></div>
+    <section id="products" class="cards-section">
+        <div id="statusPL" class="status">Loading products…</div>
+        <div id="productsGrid" class="products-grid" hidden></div>
+
+        <div id="pagination" class="pagination" hidden aria-label="Pagination"></div>
     </section>
 </main>
 
@@ -60,6 +62,6 @@
     </div>
 </footer>
 
-<script src="index.js" defer></script>
+<script src="product-listing.js" defer></script>
 </body>
 </html>
