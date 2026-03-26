@@ -1,7 +1,7 @@
-package edu.byui.apj.storefront.web.controller;
+package edu.byui.apj.storefront.api.controller;
 
-import edu.byui.apj.storefront.web.model.Card;
-import edu.byui.apj.storefront.web.service.CardService;
+import edu.byui.apj.storefront.api.model.Card;
+import edu.byui.apj.storefront.api.service.CardService;
 import java.util.List;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
