@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
     async function fetchFeaturedCards() {
-        const resp = await fetch('/api/cards/featured', { headers: { 'Accept': 'application/json' }});
+        const resp = await fetch('/api/trading-cards/featured', { headers: { 'Accept': 'application/json' }});
         if (!resp.ok) {
             const text = await resp.text().catch(()=>null);
             throw new Error(`HTTP ${resp.status} ${resp.statusText} ${text ? '- ' + text : ''}`);
@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (Array.isArray(data)) return data;
         if (data && Array.isArray(data.cards)) return data.cards;
         if (data && typeof data === 'object') return Object.values(data);
-        throw new Error('Unexpected response format from /api/cards/featured');
+        throw new Error('Unexpected response format from /api/trading-cards/featured');
     }
 
     function renderCards(items) {

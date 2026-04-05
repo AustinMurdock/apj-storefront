@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Fantasy CardWerx — Products</title>
 
-    <!-- Roboto -->
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="index.css" />
+    <link rel="stylesheet" href="product-listing.css" />
 </head>
 <body>
 <header class="site-header">
@@ -40,17 +40,51 @@
     </div>
 </header>
 
-<main class="main">
-    <section class="products-hero">
-        <h2 id="resultsHeading">Products</h2>
-        <p id="resultsSummary" class="lead">Loading products…</p>
-    </section>
+<main class="main listing-main">
+    <aside id="listingSidebar" class="listing-sidebar" aria-label="Filters and sort">
+        <h3 class="sidebar-title">Sort &amp; Filter</h3>
 
-    <section id="products" class="cards-section">
-        <div id="statusPL" class="status">Loading products…</div>
-        <div id="productsGrid" class="products-grid" hidden></div>
+        <div class="sidebar-block">
+            <label for="sortBy">Sort by</label>
+            <select id="sortBy" class="sidebar-select" aria-label="Sort results by">
+                <option value="">Default</option>
+                <option value="price">Price</option>
+                <option value="name">Name</option>
+            </select>
+        </div>
 
-        <div id="pagination" class="pagination" hidden aria-label="Pagination"></div>
+        <div class="sidebar-block">
+            <label for="filterSpecialty">Filter by specialty</label>
+            <select id="filterSpecialty" class="sidebar-select" aria-label="Specialty filter">
+                <option value="">All specialties</option>
+            </select>
+        </div>
+
+        <div class="sidebar-block">
+            <label for="filterMinPrice">Filter by price range</label>
+            <div class="price-range">
+                <input id="filterMinPrice" class="sidebar-input price-input" type="number" min="0" step="0.01" placeholder="Min" aria-label="Minimum price" />
+                <span class="price-sep">–</span>
+                <input id="filterMaxPrice" class="sidebar-input price-input" type="number" min="0" step="0.01" placeholder="Max" aria-label="Maximum price" />
+            </div>
+            <button id="applyPrice" type="button" class="sidebar-btn">Apply</button>
+        </div>
+
+        <button id="clearFilters" type="button" class="sidebar-btn sidebar-btn-secondary">Clear filters</button>
+    </aside>
+
+    <section class="listing-content">
+        <div class="products-hero">
+            <h2 id="resultsHeading">Products</h2>
+            <p id="resultsSummary" class="lead">Loading products…</p>
+        </div>
+
+        <div id="products" class="cards-section">
+            <div id="statusPL" class="status">Loading products…</div>
+            <div id="productsGrid" class="products-grid" hidden></div>
+
+            <div id="pagination" class="pagination" hidden aria-label="Pagination"></div>
+        </div>
     </section>
 </main>
 

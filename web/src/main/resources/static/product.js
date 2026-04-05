@@ -1,7 +1,6 @@
 // product.js
-// Loads /api/cards/{id} and renders product detail view.
-// This version follows the Card model exactly (no description field).
-// It expects JSON like: { id, name, specialty, contribution, price, imageUrl }
+// Loads /api/trading-cards/{id} and renders product detail view.
+// Expects JSON like: { id, name, specialty, contribution, price, imageUrl } (TradingCardDTO).
 
 document.addEventListener('DOMContentLoaded', () => {
     const params = new URLSearchParams(window.location.search);
@@ -48,7 +47,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     (async function loadProduct() {
         try {
-            const resp = await fetch(`/api/cards/${encodeURIComponent(id)}`, { headers: { 'Accept': 'application/json' }});
+            const resp = await fetch(`/api/trading-cards/${encodeURIComponent(id)}`, { headers: { 'Accept': 'application/json' }});
+            if (resp.status === 404) {
+                statusEl.textContent = 'Product not found. It may have been removed or the link may be incorrect.';
+                statusEl.hidden = false;
+                productInner.hidden = true;
+                return;
+            }
             if (!resp.ok) {
                 let txt = '';
                 try { txt = await resp.text(); } catch (e) { /* ignore */ }

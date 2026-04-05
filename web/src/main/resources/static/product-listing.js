@@ -1,23 +1,28 @@
 // product-listing.js
-// Fetch all products from /api/cards, optionally filter by q (from querystring),
-// and display client-side pagination with 20 items per page and 5 cards per row.
+// Browse: server-side pagination via GET /api/trading-cards?page=&size=&sort=
+// Search / filter: fetch full list from API, then client-side pagination.
 
 document.addEventListener('DOMContentLoaded', () => {
     const params = new URLSearchParams(window.location.search);
     const q = (params.get('q') || '').trim();
+    const sort = params.get('sort') || '';
+    const pageParam = params.get('page');
+    const currentPage = Math.max(0, parseInt(pageParam || '0', 10));
+    const specialty = (params.get('specialty') || '').trim();
+    const minPrice = params.get('minPrice');
+    const maxPrice = params.get('maxPrice');
+
+    const PAGE_SIZE = 12;
+    const PER_PAGE_CLIENT = 20;
+
     const searchInput = document.getElementById('searchInputPL');
     const searchForm = document.getElementById('searchFormPL');
-
-    if (searchInput) searchInput.value = q;
-    if (searchForm) {
-        searchForm.addEventListener('submit', (ev) => {
-            ev.preventDefault();
-            const newQ = (searchInput.value || '').trim();
-            const newParams = new URLSearchParams();
-            if (newQ) newParams.set('q', newQ);
-            window.location.href = `product-listing.html?${newParams.toString()}`;
-        });
-    }
+    const sortByEl = document.getElementById('sortBy');
+    const filterSpecialtyEl = document.getElementById('filterSpecialty');
+    const filterMinPriceEl = document.getElementById('filterMinPrice');
+    const filterMaxPriceEl = document.getElementById('filterMaxPrice');
+    const applyPriceBtn = document.getElementById('applyPrice');
+    const clearFiltersBtn = document.getElementById('clearFilters');
 
     const statusEl = document.getElementById('statusPL');
     const gridEl = document.getElementById('productsGrid');
@@ -25,62 +30,177 @@ document.addEventListener('DOMContentLoaded', () => {
     const resultsHeading = document.getElementById('resultsHeading');
     const resultsSummary = document.getElementById('resultsSummary');
 
-    const PER_PAGE = 20;
-    let allItems = [];
-    let filteredItems = [];
-    let currentPage = 1;
+    let clientPage = 1;
+    let fullList = [];
 
-    fetchAll()
-        .then(items => {
-            allItems = items;
-            if (q) {
-                filteredItems = filterItems(allItems, q);
-            } else {
-                filteredItems = allItems.slice();
+    function isBrowseMode() {
+        return !q && !specialty && minPrice === null && maxPrice === null;
+    }
+
+    function updateUrl(updates) {
+        const p = new URLSearchParams(window.location.search);
+        Object.entries(updates).forEach(([k, v]) => {
+            if (v === '' || v === null || v === undefined) p.delete(k);
+            else p.set(k, String(v));
+        });
+        const query = p.toString();
+        const url = query ? `product-listing.html?${query}` : 'product-listing.html';
+        window.history.replaceState({}, '', url);
+    }
+
+    if (searchInput) searchInput.value = q;
+    if (sortByEl) sortByEl.value = sort;
+    if (filterMinPriceEl && minPrice !== null) filterMinPriceEl.value = minPrice;
+    if (filterMaxPriceEl && maxPrice !== null) filterMaxPriceEl.value = maxPrice;
+
+    if (searchForm) {
+        searchForm.addEventListener('submit', (ev) => {
+            ev.preventDefault();
+            const newQ = (searchInput.value || '').trim();
+            const p = new URLSearchParams();
+            if (newQ) p.set('q', newQ);
+            window.location.href = `product-listing.html?${p.toString()}`;
+        });
+    }
+
+    sortByEl?.addEventListener('change', () => {
+        updateUrl({ sort: sortByEl.value || null, page: 0 });
+        load();
+    });
+
+    filterSpecialtyEl?.addEventListener('change', () => {
+        const val = (filterSpecialtyEl?.value || '').trim();
+        updateUrl({ specialty: val || null, page: 0 });
+        load();
+    });
+
+    applyPriceBtn?.addEventListener('click', () => {
+        const min = filterMinPriceEl?.value;
+        const max = filterMaxPriceEl?.value;
+        updateUrl({ minPrice: min || null, maxPrice: max || null, page: 0 });
+        load();
+    });
+
+    clearFiltersBtn?.addEventListener('click', () => {
+        if (filterSpecialtyEl) filterSpecialtyEl.value = '';
+        if (filterMinPriceEl) filterMinPriceEl.value = '';
+        if (filterMaxPriceEl) filterMaxPriceEl.value = '';
+        window.location.href = 'product-listing.html';
+    });
+
+    async function loadSpecialties() {
+        try {
+            const resp = await fetch('/api/trading-cards/specialties', { headers: { 'Accept': 'application/json' } });
+            if (!resp.ok) return;
+            const list = await resp.json();
+            if (!Array.isArray(list) || !filterSpecialtyEl) return;
+            list.forEach(s => {
+                if (s != null && String(s).trim() !== '') {
+                    const opt = document.createElement('option');
+                    opt.value = String(s).trim();
+                    opt.textContent = String(s).trim();
+                    filterSpecialtyEl.appendChild(opt);
+                }
+            });
+        } catch (e) {
+            console.warn('Could not load specialties', e);
+        }
+    }
+
+    loadSpecialties().then(() => {
+        if (specialty && filterSpecialtyEl) filterSpecialtyEl.value = specialty;
+        load();
+    });
+
+    function buildBrowseUrl(page, sortVal) {
+        const p = new URLSearchParams();
+        p.set('page', String(page));
+        p.set('size', String(PAGE_SIZE));
+        if (sortVal) p.set('sort', sortVal);
+        return `/api/trading-cards?${p.toString()}`;
+    }
+
+    async function load() {
+        statusEl.textContent = 'Loading products…';
+        statusEl.hidden = false;
+        gridEl.hidden = true;
+        paginationEl.hidden = true;
+
+        const currentParams = new URLSearchParams(window.location.search);
+        const pageNum = Math.max(0, parseInt(currentParams.get('page') || '0', 10));
+        const currentQ = (currentParams.get('q') || '').trim();
+        const currentSpecialty = (currentParams.get('specialty') || '').trim();
+        const currentMinPrice = currentParams.get('minPrice');
+        const currentMaxPrice = currentParams.get('maxPrice');
+
+        try {
+            if (currentQ) {
+                const resp = await fetch(`/api/trading-cards/search?query=${encodeURIComponent(currentQ)}`, { headers: { 'Accept': 'application/json' } });
+                if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+                fullList = await resp.json();
+                if (!Array.isArray(fullList)) fullList = [];
+                clientPage = Math.max(1, pageNum + 1);
+                renderClientPaginated(fullList, currentQ, null, null);
+                return;
             }
-            renderResults();
-        })
-        .catch(err => {
+            if (currentSpecialty) {
+                const resp = await fetch(`/api/trading-cards/filter/specialty?specialty=${encodeURIComponent(currentSpecialty)}`, { headers: { 'Accept': 'application/json' } });
+                if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+                fullList = await resp.json();
+                if (!Array.isArray(fullList)) fullList = [];
+                clientPage = Math.max(1, pageNum + 1);
+                renderClientPaginated(fullList, null, currentSpecialty, null);
+                return;
+            }
+            if (currentMinPrice !== null || currentMaxPrice !== null) {
+                const p = new URLSearchParams();
+                if (currentMinPrice !== null && currentMinPrice !== '') p.set('minPrice', currentMinPrice);
+                if (currentMaxPrice !== null && currentMaxPrice !== '') p.set('maxPrice', currentMaxPrice);
+                const resp = await fetch(`/api/trading-cards/filter/price?${p.toString()}`, { headers: { 'Accept': 'application/json' } });
+                if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+                fullList = await resp.json();
+                if (!Array.isArray(fullList)) fullList = [];
+                clientPage = Math.max(1, pageNum + 1);
+                renderClientPaginated(fullList, null, null, 'price');
+                return;
+            }
+
+            const currentSort = currentParams.get('sort') || sort;
+            const url = buildBrowseUrl(pageNum, currentSort);
+            const resp = await fetch(url, { headers: { 'Accept': 'application/json' } });
+            if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+            const data = await resp.json();
+            const items = Array.isArray(data) ? data : [];
+            const hasMore = items.length >= PAGE_SIZE;
+            resultsHeading.textContent = 'Products';
+            resultsSummary.textContent = items.length === 0
+                ? 'No products found.'
+                : `Page ${pageNum + 1}${hasMore ? '' : ' (last page)'}. ${items.length} item${items.length === 1 ? '' : 's'}.`;
+            renderCards(items);
+            renderServerPagination(pageNum, hasMore);
+        } catch (err) {
             console.error(err);
             statusEl.textContent = 'Failed to load products. Please try again later.';
-        });
-
-    async function fetchAll() {
-        const resp = await fetch('/api/cards', { headers: { 'Accept': 'application/json' }});
-        if (!resp.ok) {
-            const text = await resp.text().catch(()=>null);
-            throw new Error(`HTTP ${resp.status} ${resp.statusText} ${text ? '- ' + text : ''}`);
         }
-        const data = await resp.json();
-        if (Array.isArray(data)) return data;
-        if (data && Array.isArray(data.cards)) return data.cards;
-        if (data && typeof data === 'object') return Object.values(data);
-        return [];
     }
 
-    function filterItems(items, q) {
-        const s = q.toLowerCase();
-        return items.filter(item => {
-            const title = (item.name ?? item.title ?? '').toString().toLowerCase();
-            const specialty = (item.specialty ?? item.category ?? '').toString().toLowerCase();
-            const contribution = (item.contribution ?? item.contributor ?? item.author ?? '').toString().toLowerCase();
-            const desc = (item.description ?? item.desc ?? '').toString().toLowerCase();
-            return title.includes(s) || specialty.includes(s) || contribution.includes(s) || desc.includes(s);
-        });
-    }
+    function renderClientPaginated(items, searchQ, specialtyLabel, priceLabel) {
+        const total = items.length;
+        const totalPages = Math.max(1, Math.ceil(total / PER_PAGE_CLIENT));
+        clientPage = Math.min(Math.max(1, clientPage), totalPages);
+        const start = (clientPage - 1) * PER_PAGE_CLIENT;
+        const pageItems = items.slice(start, start + PER_PAGE_CLIENT);
 
-    function renderResults() {
-        const total = filteredItems.length;
-        const totalPages = Math.max(1, Math.ceil(total / PER_PAGE));
-        currentPage = Math.min(Math.max(1, currentPage), totalPages);
+        const cp = new URLSearchParams(window.location.search);
+        const qLabel = (searchQ !== undefined ? searchQ : (cp.get('q') || '').trim());
+        const spLabel = (specialtyLabel !== undefined ? specialtyLabel : (cp.get('specialty') || '').trim());
+        const hasPriceFilter = (priceLabel !== undefined && priceLabel) || cp.has('minPrice') || cp.has('maxPrice');
+        if (qLabel) resultsHeading.textContent = `Search results for "${qLabel}"`;
+        else if (spLabel) resultsHeading.textContent = `Specialty: ${spLabel}`;
+        else if (hasPriceFilter) resultsHeading.textContent = 'Filtered by price';
+        else resultsHeading.textContent = 'Products';
+        resultsSummary.textContent = `${total} product${total === 1 ? '' : 's'} found. Showing page ${clientPage} of ${totalPages}.`;
 
-        resultsHeading.textContent = q ? `Search results for “${q}”` : 'Products';
-        resultsSummary.textContent = `${total} product${total === 1 ? '' : 's'} found. Showing page ${currentPage} of ${totalPages}.`;
-
-        const start = (currentPage - 1) * PER_PAGE;
-        const pageItems = filteredItems.slice(start, start + PER_PAGE);
-
-        gridEl.innerHTML = '';
         if (pageItems.length === 0) {
             statusEl.textContent = 'No products found.';
             statusEl.hidden = false;
@@ -91,19 +211,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
         statusEl.hidden = true;
         gridEl.hidden = false;
+        renderCards(pageItems);
+        renderClientPagination(totalPages);
+    }
 
-        pageItems.forEach(item => {
+    function renderCards(items) {
+        gridEl.innerHTML = '';
+        items.forEach(item => {
             const id = item.id ?? item.cardId ?? item.uuid ?? '';
             const title = item.name ?? item.title ?? item.cardName ?? 'Untitled Card';
             const imageUrl = item.imageURL ?? item.imageUrl ?? item.image ?? item.img ?? item.thumbnail ?? null;
-            const specialty = item.specialty ?? item.category ?? '';
+            const specialtyVal = item.specialty ?? item.category ?? '';
             const contribution = item.contribution ?? item.contributor ?? item.author ?? '';
             const price = item.price ?? item.cost ?? item.listPrice ?? null;
             const description = item.description ?? item.desc ?? '';
 
             const card = document.createElement('article');
             card.className = 'card';
-            card.setAttribute('tabindex','0');
+            card.setAttribute('tabindex', '0');
             card.setAttribute('aria-labelledby', `prod-title-${id}`);
 
             const media = document.createElement('div');
@@ -128,41 +253,68 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const desc = document.createElement('p');
             desc.className = 'card-desc';
-            desc.textContent = description || `${specialty ? specialty + ' · ' : ''}${contribution ? 'By: ' + contribution : ''}`;
+            desc.textContent = description || `${specialtyVal ? specialtyVal + ' · ' : ''}${contribution ? 'By: ' + contribution : ''}`;
 
             const meta = document.createElement('div');
             meta.className = 'card-meta';
-
             const row = document.createElement('div');
             row.className = 'meta-row';
-
             const priceEl = document.createElement('div');
             priceEl.className = 'price';
             priceEl.textContent = price != null ? formatPrice(price) : '—';
-
             const link = document.createElement('a');
             link.className = 'cta';
             link.href = `product.html?id=${encodeURIComponent(id)}`;
             link.textContent = 'View';
-
             row.appendChild(priceEl);
             row.appendChild(link);
-
             meta.appendChild(row);
 
             content.appendChild(h3);
             content.appendChild(desc);
             content.appendChild(meta);
-
             card.appendChild(media);
             card.appendChild(content);
             gridEl.appendChild(card);
         });
-
-        renderPagination(totalPages);
     }
 
-    function renderPagination(totalPages) {
+    function renderServerPagination(currentPageZeroBased, hasMore) {
+        paginationEl.hidden = false;
+        paginationEl.innerHTML = '';
+
+        const prevPage = Math.max(0, currentPageZeroBased - 1);
+        const nextPage = currentPageZeroBased + 1;
+
+        const prevBtn = document.createElement('button');
+        prevBtn.className = 'page-btn';
+        prevBtn.textContent = '‹ Prev';
+        prevBtn.setAttribute('aria-label', 'Previous page');
+        prevBtn.disabled = currentPageZeroBased === 0;
+        prevBtn.addEventListener('click', () => {
+            updateUrl({ page: prevPage });
+            load();
+        });
+        paginationEl.appendChild(prevBtn);
+
+        const pageLabel = document.createElement('span');
+        pageLabel.className = 'page-info';
+        pageLabel.textContent = `Page ${currentPageZeroBased + 1}`;
+        paginationEl.appendChild(pageLabel);
+
+        const nextBtn = document.createElement('button');
+        nextBtn.className = 'page-btn';
+        nextBtn.textContent = 'Next ›';
+        nextBtn.setAttribute('aria-label', 'Next page');
+        nextBtn.disabled = !hasMore;
+        nextBtn.addEventListener('click', () => {
+            updateUrl({ page: nextPage });
+            load();
+        });
+        paginationEl.appendChild(nextBtn);
+    }
+
+    function renderClientPagination(totalPages) {
         if (totalPages <= 1) {
             paginationEl.hidden = true;
             return;
@@ -170,48 +322,41 @@ document.addEventListener('DOMContentLoaded', () => {
         paginationEl.hidden = false;
         paginationEl.innerHTML = '';
 
-        function makeBtn(label, page, isCurrent = false, ariaLabel = null) {
-            const btn = document.createElement('button');
-            btn.className = 'page-btn';
-            btn.textContent = label;
-            if (ariaLabel) btn.setAttribute('aria-label', ariaLabel);
-            if (isCurrent) btn.setAttribute('aria-current', 'true');
-            btn.addEventListener('click', () => {
-                currentPage = page;
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-                renderResults();
-            });
-            return btn;
-        }
-
-        const prevBtn = makeBtn('‹ Prev', Math.max(1, currentPage - 1), false, 'Previous page');
+        const prevBtn = document.createElement('button');
+        prevBtn.className = 'page-btn';
+        prevBtn.textContent = '‹ Prev';
+        prevBtn.setAttribute('aria-label', 'Previous page');
+        prevBtn.addEventListener('click', () => {
+            clientPage = Math.max(1, clientPage - 1);
+            updateUrl({ page: clientPage - 1 });
+            renderClientPaginated(fullList);
+        });
         paginationEl.appendChild(prevBtn);
 
-        const maxButtons = 7;
-        let start = Math.max(1, currentPage - Math.floor(maxButtons/2));
-        let end = start + maxButtons - 1;
-        if (end > totalPages) {
-            end = totalPages;
-            start = Math.max(1, end - maxButtons + 1);
-        }
+        const pageLabel = document.createElement('span');
+        pageLabel.className = 'page-info';
+        pageLabel.textContent = `Page ${clientPage} of ${totalPages}`;
+        paginationEl.appendChild(pageLabel);
 
-        for (let p = start; p <= end; p++) {
-            const btn = makeBtn(String(p), p, p === currentPage, `Go to page ${p}`);
-            paginationEl.appendChild(btn);
-        }
-
-        const nextBtn = makeBtn('Next ›', Math.min(totalPages, currentPage + 1), false, 'Next page');
+        const nextBtn = document.createElement('button');
+        nextBtn.className = 'page-btn';
+        nextBtn.textContent = 'Next ›';
+        nextBtn.setAttribute('aria-label', 'Next page');
+        nextBtn.addEventListener('click', () => {
+            clientPage = Math.min(totalPages, clientPage + 1);
+            updateUrl({ page: clientPage - 1 });
+            renderClientPaginated(fullList);
+        });
         paginationEl.appendChild(nextBtn);
     }
 
     function titleInitials(title) {
-        const words = (title || '').trim().split(/\s+/).slice(0,3);
-        const initials = words.map(w => w[0]?.toUpperCase() ?? '').join('');
-        return initials || 'FC';
+        const words = (title || '').trim().split(/\s+/).slice(0, 3);
+        return words.map(w => w[0]?.toUpperCase() ?? '').join('') || 'FC';
     }
 
     function formatPrice(val) {
-        const num = (typeof val === 'string') ? Number(val.replace(/[^0-9.-]+/g,'')) : Number(val);
+        const num = (typeof val === 'string') ? Number(val.replace(/[^0-9.-]+/g, '')) : Number(val);
         if (!Number.isFinite(num)) return String(val);
         try {
             return new Intl.NumberFormat(undefined, { style: 'currency', currency: 'USD', maximumFractionDigits: 2 }).format(num);
@@ -219,4 +364,6 @@ document.addEventListener('DOMContentLoaded', () => {
             return `$${num.toFixed(2)}`;
         }
     }
+
+    load();
 });

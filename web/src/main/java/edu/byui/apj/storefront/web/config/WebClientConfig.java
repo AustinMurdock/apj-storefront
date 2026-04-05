@@ -11,10 +11,20 @@ public class WebClientConfig {
     @Value("${card.api.base-url}")
     private String cardApiBaseUrl;
 
+    @Value("${mongo.api.base-url}")
+    private String mongoApiBaseUrl;
+
     @Bean
     public WebClient cardApiClient() {
         return WebClient.builder()
             .baseUrl(cardApiBaseUrl)
+            .build();
+    }
+
+    @Bean
+    public WebClient tradingCardClient() {
+        return WebClient.builder()
+            .baseUrl(mongoApiBaseUrl)
             .build();
     }
 }
